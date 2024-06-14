@@ -2,9 +2,9 @@
 
 uses: https://github.com/thiagoalessio/tesseract-ocr-for-php
 
-use php 7.4 or newer docker image with ubunutu.
+required: use php 7.4 or newer docker image with ubunutu.
 
-install: in your php image
+in your php 7 / 8 container run
 
 ```
     apt-get update
