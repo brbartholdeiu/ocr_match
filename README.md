@@ -2,6 +2,8 @@
 
 uses: https://github.com/thiagoalessio/tesseract-ocr-for-php
 
+use php 7.4 or newer docker image with ubunutu.
+
 install: in your php image
 
 ```
