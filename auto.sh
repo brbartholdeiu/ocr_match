@@ -26,8 +26,16 @@ squash_commits() {
 
     # Check if the rebase was successful
     if [[ $? -eq 0 ]]; then
-        echo "Rebase successful! Now pushing the squashed commits."
-        git -C "$WATCH_DIR" push -f origin $(git -C "$WATCH_DIR" rev-parse --abbrev-ref HEAD)
+        # Get the current branch name
+        CURRENT_BRANCH=$(git -C "$WATCH_DIR" rev-parse --abbrev-ref HEAD)
+
+        # If HEAD is detached, reattach to the correct branch
+        if [[ "$CURRENT_BRANCH" == "HEAD" ]]; then
+            CURRENT_BRANCH=$(git -C "$WATCH_DIR" for-each-ref --format='%(refname:short)' $(git -C "$WATCH_DIR" symbolic-ref HEAD))
+        fi
+
+        echo "Rebase successful! Now pushing the squashed commits to $CURRENT_BRANCH."
+        git -C "$WATCH_DIR" push -f origin "$CURRENT_BRANCH"
         echo "Squash complete!"
     else
         echo "Rebase encountered an error. Please resolve conflicts and continue the rebase manually."
