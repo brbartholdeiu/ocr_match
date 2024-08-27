@@ -1,4 +1,5 @@
 <?php
+// added auto push on file save with auto.sh
 // added post commit hooks test
 // Enable PHP error reporting
 error_reporting(E_ALL);
