@@ -1,6 +1,6 @@
 <?php
 // added auto push on file save with auto.sh
-// more updates to test auto.sh with gitignore and self ignore itself?
+// more updates to test auto.sh with gitignore
 // added post commit hooks test with auto.sh
 // Enable PHP error reporting mode
 error_reporting(E_ALL);
