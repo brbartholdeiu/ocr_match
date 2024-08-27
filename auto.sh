@@ -7,7 +7,7 @@ WATCH_DIR=$(pwd)
 squash_commits() {
     # List recent commits to help the user choose SHAs
     echo "Recent commits:"
-    git -C "$WATCH_DIR" log --oneline
+    git -C "$WATCH_DIR" --no-pager log --oneline
 
     # Ask the user for the start and end SHAs
     read -p "Enter the start SHA to squash from: " START_SHA
@@ -17,13 +17,21 @@ squash_commits() {
         END_SHA="HEAD"
     fi
 
+    # Disable the pager for this command to prevent (END) issue
+    export GIT_PAGER=cat
+
     # Perform an interactive rebase to squash commits
-    git -C "$WATCH_DIR" rebase -i $START_SHA^ $END_SHA
+    echo "Starting interactive rebase..."
+    git -C "$WATCH_DIR" rebase -i "$START_SHA"^ "$END_SHA"
 
-    # Push the squashed commit
-    git -C "$WATCH_DIR" push -f origin $(git -C "$WATCH_DIR" rev-parse --abbrev-ref HEAD)
-
-    echo "Squash complete!"
+    # Check if the rebase was successful
+    if [[ $? -eq 0 ]]; then
+        echo "Rebase successful! Now pushing the squashed commits."
+        git -C "$WATCH_DIR" push -f origin $(git -C "$WATCH_DIR" rev-parse --abbrev-ref HEAD)
+        echo "Squash complete!"
+    else
+        echo "Rebase encountered an error. Please resolve conflicts and continue the rebase manually."
+    fi
 }
 
 # Check for the --squash flag
